@@ -16,12 +16,16 @@ if you do NOT want it public, keep that block commented or remove before publish
 | Field | Value |
 |---|---|
 | Date | 2026-06-23 |
+| Flights (local) | **1555:** ~12:06→~12:09 PM (~3 min airborne) · **1550:** ~1:19→~1:20 PM (~49 s airborne) |
 | Location | Okotoks, AB (private residence — gated backyard) |
 | Surface | Grass |
 | Aircraft | Scout 15 (9IMOD 15" quad) |
 | Pilot-in-command | Andrew Dewar |
-| Flight profile | **Sub-2 m hop**, gated backyard, **kill switch at the ready** |
+| Flight profile | **~2 m hover (OGE)**, gated backyard, **kill switch at the ready** |
 | Logging | None this session (SD card pending) — live telemetry only |
+
+> Flight times are approximate (the GCS log's absolute clock was offset; times anchored to wall-clock
+> with the log's reliable relative offsets). Durations and the ~1 h 13 m gap between flights are from the log.
 
 ## 2. Goal
 Live-telemetry comparison of the two prop sets to inform the endurance/smoothness choice:
@@ -47,18 +51,27 @@ Take off in Loiter → steady hands-off hover ~2 m, 60–90 s → after ~20 s se
 | Prop | Vibe X/Y/Z (steady) | New clips in hover | Hover current (A) | Voltage (sag) | Throttle % |
 |---|---|---|---|---|---|
 | **1555** (5.5 pitch) | **~6.7 / 11.4 / 6.3** | 0 (the 33 clips were from the start-of-flight anomaly) | **~16.3** | ~23.3 (minimal sag) | **~19%** |
-| **1550** (5.0 pitch) | *pending — not yet flown* | | | | |
+| **1550** (5.0 pitch) | **~8.3 / 13.8 / 6.6** | 0 | **~14.5** | ~23.2 (minimal sag) | **~21%** |
 
-> Steady values taken from the ~1 min Loiter hover segment (telemetry samples 115–184),
-> excluding the start-of-flight anomaly (see §6).
+> Both hovers at **~2 m, out of ground effect** (15" props ≈ 5 rotor diameters — IGE gone by ~2–3).
+> Steady values from the settled Loiter hover segments (1555: telemetry samples 115–184; 1550: rows
+> 28–55). Same single 9 Ah pack, similar charge (~23.2–23.3 V). Rangefinder not in telem stream;
+> baro altitude unreliable (un-zeroed) — height confirmed visually at 2 m.
 
-### Flight-time estimate (single 9 Ah pack)
+### Prop A/B verdict (both OGE @ 2 m — confounds removed)
+- **1550 = better endurance:** ~14.5 A vs ~16.3 A — **~11% less hover current** (trustworthy now that height is matched).
+- **1555 = smoother:** lower vibration on all three axes (esp. Y: 11.4 vs 13.8).
+- Both: **0 clips, all axes < 30 m/s/s — acceptable.**
+
+### Flight-time estimate (single 9 Ah pack, OGE hover @ 2 m)
 - Battery: **9 Ah single pack (6S2P)** → usable ≈ **7.2 Ah**. *(Not flown in parallel.)*
-- **Measured (today, sub-2 m / ground effect):** 7.2 ÷ 16.3 × 60 ≈ **~26 min** — optimistic (ground effect lowers draw).
-- **Realistic OGE (projected, ~20–25 A):** **~18–22 min.** ← plan missions on this.
-- **Note:** the build doc's ~42 min came from a motor **g/W** calculation. Measured hover draw is
-  **~1.5–2× higher** than that estimate — datasheet g/W is a peak-efficiency figure; real hover sits
-  off-peak and adds ESC/wiring losses. **Treat ~20 min single-pack as the honest endurance.**
+- **1550 @ 14.5 A:** 7.2 ÷ 14.5 × 60 ≈ **~30 min**.
+- **1555 @ 16.3 A:** 7.2 ÷ 16.3 × 60 ≈ **~26 min**.
+- **Still-air hover only** — wind, maneuvering, payload will derate. But this **supersedes the earlier
+  ~18–22 min projection** (which assumed 20–25 A): real OGE hover draw is lower than feared.
+- **Note:** the build doc's ~42 min came from a motor **g/W** calc; measured hover draw is still higher
+  than that peak-efficiency figure (off-peak operating point + ESC/wiring losses). **Plan on ~26–30 min
+  still-air, derate for conditions.**
 
 ## 6. Observations / anomalies
 - **ANOMALY — uncommanded violent climb at start of flight.** Took off in the wrong mode
@@ -72,13 +85,14 @@ Take off in Loiter → steady hands-off hover ~2 m, 60–90 s → after ~20 s se
 - Steady Loiter hover was smooth and controllable on 1555.
 
 ## 7. Outcome
-- **Vibration:** steady hover **~6–13 m/s/s — acceptable** (<30). The "33" seen in flight was the
+- **Vibration:** steady hover **~6–14 m/s/s — acceptable** (<30) on both props. The "33" seen in flight was the
   clip *counter* from the anomaly, not steady vibe. **No balancing strictly required** (a balance pass won't hurt).
-- **Endurance (single 9 Ah pack):** **~18–22 min realistic (OGE)**; ~26 min measured in ground effect.
-  Short of the doc's 42 min g/W estimate — see §5 note.
-- **Prop choice:** **deferred — 1550 not yet flown.** Need the 1550 hover (same pack) to compare current.
-- **Follow-ups:** 1550 prop run · true OGE hover measurement · SD card → notch filter (Mission 3) →
-  PID/Autotune (Mission 4).
+- **Endurance (single 9 Ah pack, OGE @ 2 m):** **~30 min (1550) / ~26 min (1555)** still-air hover; derate for
+  wind/maneuvering. Supersedes the earlier ~18–22 min projection.
+- **Prop choice — real tradeoff (both confirmed OGE):** **1550 = ~11% better endurance**, **1555 = smoother**.
+  Leaning **1555** unless endurance is the priority; revisit with `.bin` logs once SD card is in.
+- **Follow-ups:** SD card → notch filter (Mission 3) → PID/Autotune (Mission 4) → re-confirm prop choice with
+  logged data; optional prop balance.
 
 ---
 
