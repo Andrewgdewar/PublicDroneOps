@@ -48,10 +48,13 @@ Take off in Loiter → steady hands-off hover ~2 m, 60–90 s → after ~20 s se
 (installed), then **1550**.
 
 ## 5. Results (from QGC telemetry CSV)
+
+> **⚠️ Current-sensor calibration (updated 2026-07-01):** the FC current sensor was later found to **over-read by ~38 %** (calibrated by a full-charge → fly → recharge cycle; `BATT_AMP_PERVLT` corrected 40 → 28.9). **The hover-current and endurance figures below are the corrected true values.** Raw logged currents were 1555 ~16.3 A / 1550 ~14.5 A. The relative prop comparison (~11 %) is unaffected.
+
 | Prop | Vibe X/Y/Z (steady) | New clips in hover | Hover current (A) | Voltage (sag) | Throttle % |
 |---|---|---|---|---|---|
-| **1555** (5.5 pitch) | **~6.7 / 11.4 / 6.3** | 0 (the 33 clips were from the start-of-flight anomaly) | **~16.3** | ~23.3 (minimal sag) | **~19%** |
-| **1550** (5.0 pitch) | **~8.3 / 13.8 / 6.6** | 0 | **~14.5** | ~23.2 (minimal sag) | **~21%** |
+| **1555** (5.5 pitch) | **~6.7 / 11.4 / 6.3** | 0 (the 33 clips were from the start-of-flight anomaly) | **~11.8** | ~23.3 (minimal sag) | **~19%** |
+| **1550** (5.0 pitch) | **~8.3 / 13.8 / 6.6** | 0 | **~10.5** | ~23.2 (minimal sag) | **~21%** |
 
 > Both hovers at **~2 m, out of ground effect** (15" props ≈ 5 rotor diameters — IGE gone by ~2–3).
 > Steady values from the settled Loiter hover segments (1555: telemetry samples 115–184; 1550: rows
@@ -59,14 +62,14 @@ Take off in Loiter → steady hands-off hover ~2 m, 60–90 s → after ~20 s se
 > baro altitude unreliable (un-zeroed) — height confirmed visually at 2 m.
 
 ### Prop A/B verdict (both OGE @ 2 m — confounds removed)
-- **1550 = better endurance:** ~14.5 A vs ~16.3 A — **~11% less hover current** (trustworthy now that height is matched).
+- **1550 = better endurance:** ~10.5 A vs ~11.8 A — **~11% less hover current** (trustworthy now that height is matched).
 - **1555 = smoother:** lower vibration on all three axes (esp. Y: 11.4 vs 13.8).
 - Both: **0 clips, all axes < 30 m/s/s — acceptable.**
 
 ### Flight-time estimate (single 9 Ah pack, OGE hover @ 2 m)
 - Battery: **9 Ah single pack (6S2P)** → usable ≈ **7.2 Ah**. *(Not flown in parallel.)*
-- **1550 @ 14.5 A:** 7.2 ÷ 14.5 × 60 ≈ **~30 min**.
-- **1555 @ 16.3 A:** 7.2 ÷ 16.3 × 60 ≈ **~26 min**.
+- **1550 @ 10.5 A:** 7.2 ÷ 10.5 × 60 ≈ **~41 min**.
+- **1555 @ 11.8 A:** 7.2 ÷ 11.8 × 60 ≈ **~37 min**.
 - **Still-air hover only** — wind, maneuvering, payload will derate. But this **supersedes the earlier
   ~18–22 min projection** (which assumed 20–25 A): real OGE hover draw is lower than feared.
 - **Note:** the build doc's ~42 min came from a motor **g/W** calc; measured hover draw is still higher
@@ -87,8 +90,8 @@ Take off in Loiter → steady hands-off hover ~2 m, 60–90 s → after ~20 s se
 ## 7. Outcome
 - **Vibration:** steady hover **~6–14 m/s/s — acceptable** (<30) on both props. The "33" seen in flight was the
   clip *counter* from the anomaly, not steady vibe. **No balancing strictly required** (a balance pass won't hurt).
-- **Endurance (single 9 Ah pack, OGE @ 2 m):** **~30 min (1550) / ~26 min (1555)** still-air hover; derate for
-  wind/maneuvering. Supersedes the earlier ~18–22 min projection.
+- **Endurance (single 9 Ah pack, OGE @ 2 m):** **~41 min (1550) / ~37 min (1555)** still-air hover (corrected for the calibrated current sensor — see §5 note); derate for
+  wind/maneuvering.
 - **Prop choice — real tradeoff (both confirmed OGE):** **1550 = ~11% better endurance**, **1555 = smoother**.
   Leaning **1555** unless endurance is the priority; revisit with `.bin` logs once SD card is in.
 - **Follow-ups:** SD card → notch filter (Mission 3) → PID/Autotune (Mission 4) → re-confirm prop choice with
