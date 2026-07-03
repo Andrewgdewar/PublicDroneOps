@@ -14,7 +14,7 @@
 Two flights totalling **23.7 minutes** — the **longest and most demanding sorties to date** for this airframe, flown at altitude in gusty wind with AutoTune engaged. All systems were nominal thermally, electrically, and structurally. The aircraft held attitude well on **factory (untuned) PIDs** despite the wind. Post-flight, the motors and airframe were **confirmed cool to the touch**, consistent with the logged temperatures.
 
 Two operational findings (neither an airframe-health issue):
-1. A **GCS-telemetry failsafe** ended Flight 1 early via RTL.
+1. A **misconfigured battery-low failsafe** ended Flight 1 early via RTL (since corrected).
 2. **AutoTune could not converge the pitch Angle-P** term in the wind and saved no gains.
 
 No mechanical, thermal, or power anomalies were observed.
@@ -31,7 +31,7 @@ No mechanical, thermal, or power anomalies were observed.
 | Max groundspeed | 5.3 m/s (19 km/h) | 3.7 m/s (13 km/h) |
 | Hover throttle | 22 % | 22 % |
 | Flight modes | Loiter, RTL, AutoTune | Loiter, AutoTune |
-| Outcome | RTL (GCS failsafe) | Landed; AutoTune pitch not converged |
+| Outcome | RTL (battery-low failsafe, misconfigured) | Landed; AutoTune pitch not converged |
 
 > The **22 % hover throttle** confirms a high thrust-to-weight ratio (over-powered for weight) — the primary reason the motors run cool and the aircraft feels responsive.
 
@@ -104,7 +104,7 @@ Attitude tracking held to **~1.4–2.6° RMS** despite gusty conditions and **un
 
 ## 4. Findings & actions
 
-1. **GCS telemetry failsafe (Flight 1)** — error subsystem 6 / code 1: GCS heartbeat lost for >5 s → automatic RTL. This was **not** an RC-link or battery event (RC channels were valid throughout). **Action:** review GCS/telemetry link stability and `FS_GCS_TIMEOUT` before the next session.
+1. **Battery-low failsafe (Flight 1)** — error subsystem 6 (FAILSAFE_BATT) → automatic RTL. Root cause: `BATT_LOW_MAH` had been set to 6450 on the mistaken assumption it meant *consumed* mAh; it is actually the **remaining-capacity** threshold (firmware: `pack_capacity − consumed < BATT_LOW_MAH`), so with `BATT_CAPACITY = 7200` it tripped at only ~750 mAh consumed (~90 % battery). **Corrected:** `BATT_LOW_MAH = 800` (≈ true reserve). Not a hardware, link, or airframe issue.
 2. **AutoTune incomplete** — roll and pitch were both attempted; pitch **Angle-P determination failed** in the wind (log: *"AutoTune: Angle P Gain Determination Failed"*). No gains were saved. **Action:** retune in calm conditions, **one axis at a time** (`AUTOTUNE_AXES=1`, roll first).
 3. **No mechanical, thermal, or electrical anomalies.**
 
@@ -112,4 +112,4 @@ Attitude tracking held to **~1.4–2.6° RMS** despite gusty conditions and **un
 
 ## 5. Conclusion
 
-The Scout 15 completed its most demanding sorties to date — **23.7 minutes in gusty wind at altitude** — with **excellent thermal margins, clean vibration (zero clipping), healthy power delivery, strong GNSS, and good attitude tracking on factory gains**. The two open items (GCS link stability and AutoTune convergence) are **operational / configuration matters, not airframe health.** The aircraft is structurally and electrically sound and performed well under load.
+The Scout 15 completed its most demanding sorties to date — **23.7 minutes in gusty wind at altitude** — with **excellent thermal margins, clean vibration (zero clipping), healthy power delivery, strong GNSS, and good attitude tracking on factory gains**. The two open items (the now-corrected battery-failsafe configuration and AutoTune convergence) are **operational / configuration matters, not airframe health.** The aircraft is structurally and electrically sound and performed well under load.
