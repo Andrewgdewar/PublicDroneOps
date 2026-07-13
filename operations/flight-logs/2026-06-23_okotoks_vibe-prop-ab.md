@@ -49,6 +49,21 @@ Take off in Loiter → steady hands-off hover ~2 m, 60–90 s → after ~20 s se
 
 ## 5. Results (from QGC telemetry CSV)
 
+### 2026-07-13 follow-up — T-Motor MS1504 15×5.6 polymer+CF
+
+MS1504 maiden (`2026-07-13 10-27-23.bin`) combined the prior props' strengths:
+
+| Prop | Hover current | Hover power | Vibe X/Y/Z median |
+|---|---:|---:|---:|
+| 1555 CF | ~11.8 A | ~275 W | 6.7 / 11.4 / 6.3 |
+| 1550 CF | ~10.5 A | ~244 W | 8.3 / 13.8 / 6.6 |
+| **MS1504 polymer+CF** | **9.67 A** | **227 W** | **2.5 / 3.6 / 2.3** |
+
+MS1504 also showed zero clipping, normal ESC temperature (40°C max), ~3031 RPM hover and
+excellent ESC-notch attenuation. Cross-date power comparisons are indicative, but MS1504 is
+the clear vibration winner and the lowest measured hover-power prop to date. Ideal hover
+endurance is ~45 min from 7.2 Ah usable capacity (~42 min using a 160 Wh energy budget).
+
 > **⚠️ Current-sensor calibration (updated 2026-07-01):** the FC current sensor was later found to **over-read by ~38 %** (calibrated by a full-charge → fly → recharge cycle; `BATT_AMP_PERVLT` corrected 40 → 28.9). **The hover-current and endurance figures below are the corrected true values.** Raw logged currents were 1555 ~16.3 A / 1550 ~14.5 A. The relative prop comparison (~11 %) is unaffected.
 
 | Prop | Vibe X/Y/Z (steady) | New clips in hover | Hover current (A) | Voltage (sag) | Throttle % |
