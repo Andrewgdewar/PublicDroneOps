@@ -19,6 +19,8 @@
 | 1 | 2026-06-23 | Motor **rear-right** (Angel X4108) + M3 prop-mount bolt | Stripped M3 bolt → drilled head off → steel shavings entered bell/magnets & stator | **RESTORED** — props-off bench test: current matched all 4; magnet scoring cosmetic, no cracked magnets. Returned to service. | Andrew Dewar |
 | 2 | 2026-06-26 | Motor **rear-left = output M1** (Angel X4108) | Higher-pitch whine + residue at bell screw + bell tight to remove | **KEPT (monitor)** — ESC-RPM bench test: RPM matched all 4 at 15%/25% (no drag); whine resolves >15% (low-RPM resonance); bell stiction axial, not rotational. Spare on hand. | Andrew Dewar |
 | 3 | 2026-06-26 | Firmware (FC) | Rebuilt ArduCopter to **MatekH743-bdshot** (from plain MatekH743) to enable bidirectional DShot / ESC telemetry | **DONE** — `SERVO_BLH_BDMASK=15`, `SERVO_DSHOT_ESC=4` (EDT), `POLES=24`; per-motor RPM + temp now logging. Mods intact (git `32e43699d2`). | Andrew Dewar |
+| 4 | 2026-07-20 | Airframe / propulsion system | High-speed vibration caused 494 IMU0 clips, EKF3 lane switch and temporary control degradation at 23.0 m/s | **GROUNDED FOR INVESTIGATION** — high-speed testing suspended; props, motors, mounts, arms, landing gear/battery mount and FC isolation inspected. | Andrew Dewar |
+| 5 | 2026-07-22 | Rear motors M2 and M3 | No-prop raw-gyro test found a strong M3-position near-synchronous response; M2 also had prior damage/repair history | **REPLACED AND PARTIALLY REQUALIFIED** — both rear motors replaced; hover, 4/6/8 m/s and 10 m/s gates passed with zero clipping/EKF faults. Routine operation above 10 m/s remains unqualified. | Andrew Dewar |
 
 ---
 
@@ -83,6 +85,45 @@
 - `SERVO_BLH_BDMASK=15` now available + set; `SERVO_DSHOT_ESC=4` (BlueJay+EDT); `SERVO_BLH_POLES=24`; `MOT_PWM_TYPE=5` (DShot300).
 - **Per-motor RPM + temperature now logging** (`ESCn`); unlocks the ESC-RPM harmonic notch (`INS_HNTCH_MODE=3`) and EDT desync/demag event logging.
 - Also resolved an SD-card **`ENOSPC`** logging failure (card reseat) — `.bin` logging now working.
+
+---
+
+### #4/#5 — 2026-07-20 to 2026-07-22 — High-speed vibration event and rear-motor replacement
+
+**Event**
+- During a 2026-07-20 PosHold speed test, vibration increased sharply above 20 m/s.
+- At 23.0 m/s, IMU0 VIBE reached 144.7 m/s2 with 494 accumulated clips and EKF3
+  switched estimator lanes.
+- The aircraft remained controllable, recovered at reduced speed and landed without
+  a crash or injury.
+
+**Investigation**
+- Individual no-prop motor tests used matched commands, ESC RPM and approximately
+  2 kHz raw gyro logging on two IMUs.
+- The M3 back-left position produced the strongest near-synchronous response.
+- M2 had prior damage and repair history and showed the least stable RPM in the
+  initial bench test.
+- Both rear motors were replaced. Follow-up testing showed improved direct
+  motor-frequency response; a narrow M3-position structural response remained.
+- Motor mounts, arm/clamps, center plates, landing gear/battery mount, wiring and FC
+  isolation were inspected with no visible defect requiring repair.
+
+**Return-to-flight qualification**
+- Gyro low-pass filter returned to 18 Hz.
+- Hover and staged 4/6/8 m/s flights passed with zero clips and no EKF/ESC errors.
+- A subsequent 10 m/s flight passed the temporary qualification gate.
+- An extended 17.9 m/s characterization remained controllable and clip-free but
+  produced VIBE p95 of 65-72 m/s2 at 15-18 m/s.
+
+**Disposition**
+- Recommended routine survey band: 6-8 m/s.
+- Current qualified upper operating gate: 10 m/s.
+- Routine operation above 10 m/s, automated survey, ballast and valuable payload
+  carriage remain subject to further qualification.
+
+**References:**
+- [2026-07-20 high-speed vibration event](flight-logs/2026-07-20_okotoks_high-speed-vibration-event.md)
+- [2026-07-22 motor repair and qualification](flight-logs/2026-07-22_okotoks_motor-repair-qualification.md)
 
 ---
 
